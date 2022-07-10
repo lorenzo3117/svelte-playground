@@ -4,6 +4,7 @@
 	import DataTable, { Body, Cell, Head, Pagination, Row } from '@smui/data-table';
 	import IconButton from '@smui/icon-button';
 	import Select, { Option } from '@smui/select';
+	import { dateToString } from '../../helpers/dateToString';
 	import { todos } from '../../stores/TodoListStore';
 
 	let rowsPerPage = 10;
@@ -27,16 +28,20 @@
 		<Row>
 			<Cell checbox>Completed?</Cell>
 			<Cell style="width: 100%;">Content</Cell>
+			<Cell>Created at</Cell>
+			<Cell>Completed at</Cell>
 			<Cell>Remove</Cell>
 		</Row>
 	</Head>
 	<Body>
-		{#each $todos as { id, content, completed }}
+		{#each $todos as { id, content, completed, completedAt }}
 			<Row>
 				<Cell checkbox>
 					<Checkbox checked={completed} on:click={() => handleToggle(id)} />
 				</Cell>
 				<Cell class={completed ? 'line-through' : ''}>{content}</Cell>
+				<Cell>{dateToString(id)}</Cell>
+				<Cell>{completedAt ? dateToString(completedAt) : ''}</Cell>
 				<Cell>
 					<IconButton class="material-icons" on:click={() => handleRemove(id)}>delete</IconButton>
 				</Cell>

@@ -3,31 +3,35 @@ import { writable } from 'svelte/store';
 
 const MOCK_DATA: ITodo[] = [
 	{
-		id: 1,
+		id: Date.now(),
 		content: 'Learn Svelte',
-		completed: true
+		completed: true,
+		completedAt: Date.now()
 	},
 	{
-		id: 2,
+		id: Date.now() + 1,
 		content: 'Build a todo app',
-		completed: true
+		completed: true,
+		completedAt: Date.now() + 1
 	},
 	{
-		id: 3,
+		id: Date.now() + 2,
 		content: 'Find a job',
-		completed: false
+		completed: false,
+		completedAt: undefined
 	}
 ];
 
 function createTodos() {
-	const { subscribe, set, update } = writable(MOCK_DATA);
+	const { subscribe, update } = writable(MOCK_DATA);
 
 	function _addTodo(content: string) {
 		update((todos) => {
 			const todo = {
-				id: todos.length + 1,
+				id: Date.now(),
 				content,
-				completed: false
+				completed: false,
+				completedAt: undefined
 			};
 			return [...todos, todo];
 		});
@@ -36,7 +40,12 @@ function createTodos() {
 	function _toggleTodo(id: number) {
 		update((todos) => {
 			const todo = todos.find((todo) => todo.id === id);
-			if (todo) todo.completed = !todo.completed;
+
+			if (todo) {
+				todo.completed = !todo.completed;
+				todo.completedAt = Date.now();
+			}
+
 			return todos;
 		});
 	}
