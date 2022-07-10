@@ -5,11 +5,16 @@ const MOCK_DATA: ITodo[] = [
 	{
 		id: 1,
 		content: 'Learn Svelte',
-		completed: false
+		completed: true
 	},
 	{
 		id: 2,
 		content: 'Build a todo app',
+		completed: true
+	},
+	{
+		id: 3,
+		content: 'Find a job',
 		completed: false
 	}
 ];
@@ -17,16 +22,44 @@ const MOCK_DATA: ITodo[] = [
 function createTodos() {
 	const { subscribe, set, update } = writable(MOCK_DATA);
 
+	function _addTodo(content: string) {
+		update((todos) => {
+			const todo = {
+				id: todos.length + 1,
+				content,
+				completed: false
+			};
+			return [...todos, todo];
+		});
+	}
+
+	function _toggleTodo(id: number) {
+		update((todos) => {
+			const todo = todos.find((todo) => todo.id === id);
+			if (todo) todo.completed = !todo.completed;
+			return todos;
+		});
+	}
+
+	function _removeTodo(id: number) {
+		update((todos) => todos.filter((todo) => todo.id !== id));
+	}
+
+	function _removeCompleted() {
+		update((todos) => todos.filter((todo) => !todo.completed));
+	}
+
+	function _clearTodos() {
+		update(() => []);
+	}
+
 	return {
 		subscribe,
-		toggleTodo: (id: number) =>
-			update((todos) => {
-				const todo = todos.find((todo) => todo.id === id);
-				if (todo) todo.completed = !todo.completed;
-				return todos;
-			}),
-		removeTodo: (id: number) => update((todos) => todos.filter((todo) => todo.id !== id)),
-		reset: () => set([])
+		addTodo: _addTodo,
+		toggleTodo: _toggleTodo,
+		removeTodo: _removeTodo,
+		removeCompleted: _removeCompleted,
+		clearTodos: _clearTodos
 	};
 }
 

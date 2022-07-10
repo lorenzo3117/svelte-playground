@@ -1,6 +1,3 @@
-<script lang="ts">
-	import TodoList from '../components/todo-list/TodoList.svelte';
-</script>
+<h4>Svelte playground</h4>
 
-<h1 class="mb-5">Svelte multipurpose website</h1>
-<TodoList />
+<p>Welcome to my Svelte playground!</p>
